@@ -39,6 +39,7 @@
     $("input#shorten").click(function() {
       chrome.tabs.getSelected(undefined, function(tab) {
         $("#result").show();
+        $("#surl").val("");
         $("#loading").css("visibility", "visible");
         shortener.shorten($("#providers").val(), tab.url, function(url) {
           $("#loading").css("visibility", "hidden");
