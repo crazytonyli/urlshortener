@@ -2,8 +2,13 @@
   "name": "URL Shortener",
   "version": "1.0",
   "description": "Extension which is used to shorten URL.",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "icon48.png",
     "default_title": "Shorten this URL",
     "default_popup": "popup.html"
   },
