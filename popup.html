@@ -1,11 +1,64 @@
 <style>
-.line {
-  line-height:2em;
-}
+  body {
+    font-family: arial, sans-serif;
+    overflow: hidden;
+    background: white;
+    font-size: 14px;
+  }
+  #content {
+    width: 330px;
+  }
+  #shorten {
+    margin: 3px 0;
+  }
+  #result {
+    margin: 10px 5px;
+  }
+  #loading {
+    visibility: hidden;
+  }
+  #surl {
+    background: transparent;
+    border: none;
+    font-size: 13px;
+  }
 </style>
+<script src="lib/jquery-1.6.4.min.js"></script>
+<script src="shorten.js"></script>
 <script>
-  document.getElementById("url").focus();
-<script>
+  $("#content").ready(function() {
+    var $sel = $("#providers");
+    var providers = shortener[ "providers" ];
+    for (var i in providers) {
+      var p = providers[ i ];
+      $sel.append("<option value='" + p.index + "'>" + p.url + "</option>");
+    }
 
-<div class="line">URL: <input id="url" type="text" /><div>
-<div class="line"><input type="button" value="Shorten" /><div>
+    $("#result").hide();
+
+    $("input#shorten").click(function() {
+      chrome.tabs.getSelected(undefined, function(tab) {
+        $("#result").show();
+        $("#loading").css("visibility", "visible");
+        shortener.shorten($("#providers").val(), tab.url, function(url) {
+          $("#loading").css("visibility", "hidden");
+          var $surl = $("#surl");
+          $surl.val(url);
+          $surl.css("width", url.length + "em");
+          $surl.select();
+        });
+              });
+    });
+
+  });
+</script>
+<div id="content">
+  Shorten url of current tab using 
+  <select id="providers">
+  </select>
+</div>
+<input id="shorten" type="button" value="Shorten" />
+<div id="result">
+  <img src="loading.gif" id="loading" />
+  <input id="surl" type="text" readonly="readonly" />
+</div>
