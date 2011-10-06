@@ -20,8 +20,12 @@ var shortener = {
         "type": "POST",
         "data": "{\"longUrl\": \"" + url + "\"}",
         "dataType": "json",
+        "timeout": 20000,
         "success": function(data) {
-          callback(data[ "id" ], data[ "longUrl" ]);
+        callback(data[ "id" ], data[ "longUrl" ]);
+        },
+        "error": function() {
+        callback(false);
         }
         });
   }

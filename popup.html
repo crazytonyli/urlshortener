@@ -22,6 +22,9 @@
     border: none;
     font-size: 13px;
   }
+  .error {
+    font-color: red;
+  }
 </style>
 <script src="lib/jquery-1.6.4.min.js"></script>
 <script src="shorten.js"></script>
@@ -42,11 +45,17 @@
         $("#surl").val("");
         $("#loading").css("visibility", "visible");
         shortener.shorten($("#providers").val(), tab.url, function(url) {
-          $("#loading").css("visibility", "hidden");
           var $surl = $("#surl");
-          $surl.val(url);
-          $surl.css("width", url.length + "em");
-          $surl.select();
+          if (!url) {
+            $surl.text("Sorry, something went wrong, please try again.");
+            $surl.addClass("error");
+          } else {
+            $("#loading").css("visibility", "hidden");
+            $surl.removeClass("error");
+            $surl.val(url);
+            $surl.css("width", url.length + "em");
+            $surl.select();
+          }
         });
               });
     });
