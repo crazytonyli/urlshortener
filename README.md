@@ -9,8 +9,7 @@ Currently it is not available in [Chrome Web Store], since it is still in develo
 TODO
 ----
   - Change extension UI.
-  - Allow user input url.
-
+  - Support more URL shortener service providers.
 
   [Chrome Web Store]: https://chrome.google.com/webstore
   [package/urlshortener.crx]: https://raw.github.com/crazytonyli/urlshortener/master/package/urlshortener.crx

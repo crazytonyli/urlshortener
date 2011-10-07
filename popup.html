@@ -4,9 +4,21 @@
     overflow: hidden;
     background: white;
     font-size: 14px;
+    line-height: 1.2em;
   }
   #content {
     width: 330px;
+  }
+  #taburl {
+    font-style:italic;
+  }
+  .normal {
+    color:#7A991A;
+  }
+  .hover {
+    background-color: #7A991A;
+    color: white;
+    cursor: pointer;
   }
   #shorten {
     margin: 3px 0;
@@ -15,7 +27,7 @@
     margin: 10px 5px;
   }
   #loading {
-    visibility: hidden;
+    display:none;
   }
   #surl {
     background: transparent;
@@ -37,38 +49,50 @@
       $sel.append("<option value='" + p.index + "'>" + p.url + "</option>");
     }
 
-    $("#result").hide();
+    $("#input").mouseup(function() {
+      $(this).select();
+    }).hide();
 
+    $("#taburl").hover(function() {
+      $(this).removeClass("normal").addClass("hover");
+    }, function() {
+      $(this).removeClass("hover").addClass("normal");
+    }).click(function() {
+      $(this).hide();
+      $("#input").css("width", $(this).width()).focus().show().select();
+    });
+
+    chrome.tabs.getSelected(undefined, function(tab) {
+      $("#input").val(tab.url);
+    });
+    
     $("input#shorten").click(function() {
-      chrome.tabs.getSelected(undefined, function(tab) {
-        $("#result").show();
+      var url = $("#input").val();
+      if (url && url.length > 0) {
         $("#surl").val("");
-        $("#loading").css("visibility", "visible");
-        shortener.shorten($("#providers").val(), tab.url, function(url) {
+        $("#loading").css("display", "inline");
+        shortener.shorten($("#providers").val(), url, function(surl) {
           var $surl = $("#surl");
-          if (!url) {
-            $surl.text("Sorry, something went wrong, please try again.");
-            $surl.addClass("error");
+          if (!surl) {
+            $surl.addClass("error").text("Sorry, something went wrong, please try again.");
           } else {
-            $("#loading").css("visibility", "hidden");
+            $("#loading").css("display", "none");
             $surl.removeClass("error");
-            $surl.val(url);
-            $surl.css("width", url.length + "em");
+            $surl.val(surl);
+            $surl.css("width", surl.length + "em");
             $surl.select();
           }
         });
-              });
+      }
     });
 
   });
 </script>
 <div id="content">
-  Shorten url of current tab using 
+  Shorten <span id="taburl" class="normal">url of current tab</span><input id="input" type="text" value=""/> using 
   <select id="providers">
   </select>
-</div>
-<input id="shorten" type="button" value="Shorten" />
-<div id="result">
+  <input id="shorten" type="button" value="Shorten" />
   <img src="image/loading.gif" id="loading" />
   <input id="surl" type="text" readonly="readonly" />
 </div>
